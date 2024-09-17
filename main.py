@@ -14,9 +14,24 @@ def send_message(user_message, current_thread_id):
   response = requests.post(url, headers = headers, json = body)
   return response.json()
 
+print("Welcome! Type your message and press Enter to send.")
+print("Type 'exit' to end the program")
+print("Type 'new' to switch conversation thread.")
+print("Starting a new thread for you.\n")
+
+threads = []
+
 while True : 
   user_message = input("You: ")
-  response_data = send_message(user_message, current_thread_id)
-  latest_message = response_data.get("response")
-  current_thread_id =  response_data.get("threadId")
-  print(f"GPT: {latest_message}")
+  if user_message == "exit" :
+    break
+  elif user_message == "new": 
+    current_thread_id = None
+    print("This is a new thread")
+    continue
+  else :
+    response_data = send_message(user_message, current_thread_id)
+    latest_message = response_data.get("response")
+    current_thread_id =  response_data.get("threadId")
+    print(f"GPT: {latest_message}")
+    threads = current_thread_id
